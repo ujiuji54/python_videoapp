@@ -5,7 +5,7 @@ def image_facerect(image):
     image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     #カスケード分類器の特徴量使って顔認識
-    cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+    cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt2.xml")
     facerect = cascade.detectMultiScale(image_gray, scaleFactor=1.1, minNeighbors=1, minSize=(10, 10))
 
     color = (255, 255, 255) #白
@@ -18,13 +18,15 @@ def image_facerect(image):
     return image
 
 def video_facerect(video):
-    fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
-    output_video = cv2.VideoWriter("outputvideo.mp4", fourcc, 20.0, (1280, 720))
-    
     frame_count = int(video.get(7))
+    frame_rate = int(video.get(5))
+    frame_size = (int(video.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+    fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
+    output_video = cv2.VideoWriter("outputvideo.mp4", fourcc, frame_rate, frame_size)
+    
     for i in range(300): 
         ret, frame = video.read()
-        frame = cv2.resize(frame, (1280, 720))
+        frame = cv2.resize(frame, frame_size)
         output_video.write(image_facerect(frame))
         print(i)
     return output_video

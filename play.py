@@ -13,5 +13,5 @@ def play(video):
 
         k=cv2.waitKey(frame_rate)
         if k == 27 or not is_read:
-            braek
+            break
         cv2.imshow("player", frame)
